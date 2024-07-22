@@ -2,11 +2,11 @@ package com.harena.api.datastructure;
 
 import static java.lang.Math.min;
 
+import com.harena.api.PojaGenerated;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import org.springframework.stereotype.Component;
-import com.harena.api.PojaGenerated;
 
 @PojaGenerated
 @Component
