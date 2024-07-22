@@ -2,7 +2,6 @@ package com.harena.api.mail;
 
 import com.harena.api.PojaGenerated;
 import jakarta.mail.internet.InternetAddress;
-
 import java.io.File;
 import java.util.List;
 

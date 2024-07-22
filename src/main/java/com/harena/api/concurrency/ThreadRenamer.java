@@ -1,8 +1,8 @@
 package com.harena.api.concurrency;
 
+import com.harena.api.PojaGenerated;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
-import com.harena.api.PojaGenerated;
 
 @PojaGenerated
 @Slf4j

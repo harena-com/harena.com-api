@@ -1,7 +1,7 @@
 package com.harena.api.conf;
 
-import org.springframework.test.context.DynamicPropertyRegistry;
 import com.harena.api.PojaGenerated;
+import org.springframework.test.context.DynamicPropertyRegistry;
 
 @PojaGenerated
 public class BucketConf {
