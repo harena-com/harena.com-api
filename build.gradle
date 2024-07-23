@@ -20,6 +20,22 @@ jacoco {
 
 
 repositories {
+mavenLocal()
+maven {
+    url 'https://maven-harena-com-444992822494.d.codeartifact.eu-west-3.amazonaws.com/maven/harena-store/'
+    credentials {
+        username = 'aws'
+        password = {
+            def output = new ByteArrayOutputStream()
+            exec {
+                commandLine 'bash', '-c', 'aws codeartifact get-authorization-token --domain maven-harena-com --domain-owner 444992822494 --region eu-west-3 --query authorizationToken --output text'
+                standardOutput = output
+            }
+            return output.toString().trim()
+        }()
+    }
+}
+
 
     mavenCentral()
 }
@@ -195,6 +211,7 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
+implementation 'school.hei:patrimoine:1.0'
 
 
 }
