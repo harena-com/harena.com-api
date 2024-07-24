@@ -1,1 +1,1 @@
-implementation 'school.hei:patrimoine:1.0'
+implementation 'school.hei:patrimoine:1.0.1'
