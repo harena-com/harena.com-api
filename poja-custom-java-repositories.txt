@@ -6,7 +6,11 @@ maven {
         password = {
             def output = new ByteArrayOutputStream()
             exec {
-                commandLine 'bash', '-c', 'aws codeartifact get-authorization-token --domain maven-harena-com --domain-owner 444992822494 --region eu-west-3 --query authorizationToken --output text'
+                if(Os.isFamily(Os.FAMILY_WINDOWS)){
+                    commandLine 'powershell', '-Command', 'aws codeartifact get-authorization-token --domain maven-harena-com --domain-owner 444992822494 --region eu-west-3 --query authorizationToken --output text'
+                }else {
+                    commandLine 'bash', '-c', 'aws codeartifact get-authorization-token --domain maven-harena-com --domain-owner 444992822494 --region eu-west-3 --query authorizationToken --output text'
+                }
                 standardOutput = output
             }
             return output.toString().trim()
