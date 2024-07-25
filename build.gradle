@@ -215,7 +215,8 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
     testImplementation 'org.junit-pioneer:junit-pioneer:2.2.0'
 
-implementation 'school.hei:patrimoine:1.0.1'
+implementation 'com.harena:harena-com-gen:1.0.0'
+implementation 'school.hei:patrimoine:1.0.2'
 
 
 }
