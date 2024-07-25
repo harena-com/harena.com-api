@@ -4,13 +4,12 @@ import com.harena.api.endpoint.rest.model.Exception;
 import com.harena.api.model.exception.BadRequestException;
 import com.harena.api.model.exception.ForbiddenException;
 import com.harena.api.model.exception.NotFoundException;
+import java.nio.file.AccessDeniedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 @Slf4j
@@ -31,14 +30,10 @@ public class InternalToRestExceptionHandler {
   ResponseEntity<Exception> handleDefault(java.lang.Exception e) {
     log.error("Internal error", e);
     return new ResponseEntity<>(
-            toRest(e, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+        toRest(e, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  @ExceptionHandler(
-          value = {
-                  AccessDeniedException.class,
-                  ForbiddenException.class
-          })
+  @ExceptionHandler(value = {AccessDeniedException.class, ForbiddenException.class})
   ResponseEntity<Exception> handleForbidden(java.lang.Exception e) {
     /* rest.model.Exception.Type.FORBIDDEN designates both authentication and authorization errors.
      * Hence do _not_ HttpsStatus.UNAUTHORIZED because, counter-intuitively,
