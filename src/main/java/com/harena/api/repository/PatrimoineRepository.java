@@ -1,19 +1,20 @@
 package com.harena.api.repository;
 
+import static java.nio.charset.StandardCharsets.*;
+
 import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.model.exception.InternalServerErrorException;
-import org.apache.commons.io.FileUtils;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import school.hei.patrimoine.modele.Patrimoine;
 import school.hei.patrimoine.serialisation.Serialiseur;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import static java.nio.charset.StandardCharsets.*;
-
 @Repository
+@Slf4j
 public class PatrimoineRepository {
   private final ExtendedBucketComponent bucketComponent;
   private final Serialiseur serialiseur;
@@ -29,11 +30,12 @@ public class PatrimoineRepository {
   }
 
   private Patrimoine createPatrimoineFrom(File patrimoineFile) {
+    String patrimoineAsString;
     try {
-      String patrimoineAsString = FileUtils.readFileToString(patrimoineFile, UTF_8);
-      return (Patrimoine) serialiseur.deserialise(patrimoineAsString);
+      patrimoineAsString = Files.readString(patrimoineFile.toPath());
     } catch (IOException e) {
       throw new InternalServerErrorException(e);
     }
+    return (Patrimoine) serialiseur.deserialise(patrimoineAsString);
   }
 }
