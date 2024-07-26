@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PersonneMapper {
 
-    public Personne toRest(school.hei.patrimoine.modele.Personne domain){
-        return new Personne()
-                .nom(domain.nom());
-    }
+  public Personne toRest(school.hei.patrimoine.modele.Personne domain) {
+    return new Personne().nom(domain.nom());
+  }
 }
