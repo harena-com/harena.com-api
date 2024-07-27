@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import school.hei.patrimoine.modele.Patrimoine;
+import school.hei.patrimoine.modele.possession.Possession;
 import school.hei.patrimoine.serialisation.Serialiseur;
 
 @Repository
@@ -49,5 +51,9 @@ public class PatrimoineRepository {
                     new NotFoundException(
                         "Patrimoine identified with name " + patrimoineName + " not found"));
     return createPatrimoineFrom(patrimoineFile);
+  }
+
+  public Set<Possession> getPossessionsByPatrimoineName(String nom) {
+    return getPatrimoineByName(nom).possessions();
   }
 }
