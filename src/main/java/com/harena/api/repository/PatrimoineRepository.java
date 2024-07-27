@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.model.exception.InternalServerErrorException;
+import com.harena.api.model.exception.NotImplementedException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +12,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import school.hei.patrimoine.modele.Patrimoine;
+import school.hei.patrimoine.modele.possession.Possession;
 import school.hei.patrimoine.serialisation.Serialiseur;
 
 @Repository
@@ -37,5 +39,10 @@ public class PatrimoineRepository {
       throw new InternalServerErrorException(e);
     }
     return (Patrimoine) serialiseur.deserialise(patrimoineAsString);
+  }
+
+  public List<Possession> getPossessionsByPatrimoineName(String nom) {
+    // Todo: implement patrimoine get by nom
+    throw new NotImplementedException("No functionality to find by nom");
   }
 }
