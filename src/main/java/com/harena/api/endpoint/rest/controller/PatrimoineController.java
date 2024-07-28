@@ -27,9 +27,8 @@ public class PatrimoineController {
   }
 
   @GetMapping("/patrimoines/{nom_patrimoine}")
-  public GetPatrimoines200Response getPatrimoineByName(
+  public Patrimoine getPatrimoineByNom(
       @PathVariable("nom_patrimoine") String patrimoineName) {
-    Patrimoine patrimoine = mapper.toRest(service.getPatrimoineByName(patrimoineName));
-    return new GetPatrimoines200Response().addDataItem(patrimoine);
+      return mapper.toRest(service.getPatrimoineByName(patrimoineName));
   }
 }
