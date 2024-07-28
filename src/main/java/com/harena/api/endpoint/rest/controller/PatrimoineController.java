@@ -7,6 +7,7 @@ import com.harena.api.service.PatrimoineService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,5 +24,10 @@ public class PatrimoineController {
     List<Patrimoine> data =
         service.getPaginatedPatrimoines(page, pageSize).stream().map(mapper::toRest).toList();
     return new GetPatrimoines200Response().data(data);
+  }
+
+  @GetMapping("/patrimoines/{nom_patrimoine}")
+  public Patrimoine getPatrimoineByNom(@PathVariable("nom_patrimoine") String patrimoineName) {
+    return mapper.toRest(service.getPatrimoineByName(patrimoineName));
   }
 }

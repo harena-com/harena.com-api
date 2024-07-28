@@ -1,8 +1,9 @@
 package com.harena.api.integration;
 
-import static com.harena.api.integration.confUtils.TestMocks.*;
+import static com.harena.api.integration.confUtils.TestMocks.patrimoine_ilo;
 import static com.harena.api.integration.confUtils.TestUtils.setupExtendedBucketComponent;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.harena.api.conf.FacadeIT;
 import com.harena.api.endpoint.rest.api.PatrimoineApi;
@@ -39,5 +40,31 @@ public class PatrimoineIT extends FacadeIT {
     List<Patrimoine> actual = api.getPatrimoines(0, 1).getData();
 
     assertEquals(List.of(patrimoine_ilo()), actual);
+  }
+
+  @Test
+  void get_patrimoine_by_name_ok() throws ApiException {
+    ApiClient apiClient = anApiClient();
+    PatrimoineApi api = new PatrimoineApi(apiClient);
+    Patrimoine actual = api.getPatrimoineByNom("patrimoineIloAu13mai24");
+
+    assertEquals(patrimoine_ilo(), actual);
+  }
+
+  @Test
+  void get_patrimoine_by_name_ko() {
+    ApiClient apiClient = anApiClient();
+    PatrimoineApi api = new PatrimoineApi(apiClient);
+
+    ApiException apiException =
+        assertThrows(ApiException.class, () -> api.getPatrimoineByNom("dummy"));
+    String responseBody = apiException.getResponseBody();
+    assertEquals(
+        "{"
+            + "\"type\":\"400 BAD_REQUEST\","
+            + "\"message\":\""
+            + "Patrimoine identified with name dummy not found"
+            + "\"}",
+        responseBody);
   }
 }
