@@ -27,8 +27,7 @@ public class PatrimoineController {
   }
 
   @GetMapping("/patrimoines/{nom_patrimoine}")
-  public Patrimoine getPatrimoineByNom(
-      @PathVariable("nom_patrimoine") String patrimoineName) {
-      return mapper.toRest(service.getPatrimoineByName(patrimoineName));
+  public Patrimoine getPatrimoineByNom(@PathVariable("nom_patrimoine") String patrimoineName) {
+    return mapper.toRest(service.getPatrimoineByName(patrimoineName));
   }
 }
