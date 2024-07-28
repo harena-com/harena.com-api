@@ -13,7 +13,8 @@ public class PatrimoineMapper {
     this.personneMapper = personneMapper;
   }
 
-  //Note: Leave Patrimoine.possessions() to an empty Set in the domain Mapper because it is not provided
+  // Note: Leave Patrimoine.possessions() to an empty Set in the domain Mapper because it is not
+  // provided
   // by the rest model
   // Use possession service to get a patrimoine's possession if needed
   public Patrimoine toDomain(com.harena.api.endpoint.rest.model.Patrimoine rest) {

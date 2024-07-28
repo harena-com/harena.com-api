@@ -1,7 +1,6 @@
 package com.harena.api.endpoint.rest.mapper;
 
 import com.harena.api.endpoint.rest.model.Patrimoine;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 

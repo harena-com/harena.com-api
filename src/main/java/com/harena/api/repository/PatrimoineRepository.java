@@ -38,14 +38,18 @@ public class PatrimoineRepository extends AbstractRepository<Patrimoine> {
     return patrimoines.stream().map(this::saveOrUpdate).collect(Collectors.toList());
   }
 
-  //TODO: make idempotent, here you just write and upload the file
-  //Look for an existing file, if you do not find one create, else update
-  //Delete and replace if existing
+  // TODO: make idempotent, here you just write and upload the file
+  // Look for an existing file, if you do not find one create, else update
+  // Delete and replace if existing
   private Patrimoine saveOrUpdate(Patrimoine patrimoine) {
-    File file = new File(patrimoine.nom());
+    String fileName = patrimoine.nom();
+    File file = new File(fileName);
     try {
+      if (bucketComponent.getFileFromS3(fileName).isPresent()) {
+        bucketComponent.deleteFile(fileName);
+      }
       Files.writeString(file.toPath(), serialiseur.serialise(patrimoine));
-      bucketComponent.upload(file, patrimoine.nom());
+      bucketComponent.upload(file, fileName);
     } catch (IOException e) {
       throw new InternalServerErrorException(e);
     }
