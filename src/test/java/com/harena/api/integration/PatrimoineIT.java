@@ -1,9 +1,9 @@
 package com.harena.api.integration;
 
-import static com.harena.api.integration.confUtils.TestMocks.*;
+import static com.harena.api.integration.confUtils.TestMocks.patrimoine_ilo;
 import static com.harena.api.integration.confUtils.TestUtils.setupExtendedBucketComponent;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.harena.api.conf.FacadeIT;
 import com.harena.api.endpoint.rest.api.PatrimoineApi;
@@ -12,10 +12,6 @@ import com.harena.api.endpoint.rest.client.ApiException;
 import com.harena.api.endpoint.rest.model.Patrimoine;
 import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.integration.confUtils.TestUtils;
-import java.io.File;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Paths;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,15 +29,8 @@ public class PatrimoineIT extends FacadeIT {
   }
 
   @BeforeEach
-  void setup() throws URISyntaxException {
+  void setup() {
     setupExtendedBucketComponent(bucketComponent);
-    URL resource = getClass().getClassLoader().getResource("files/patrimoineIloAu13mai24");
-    if (resource != null) {
-      File testFile = Paths.get(resource.toURI()).toFile();
-      when(bucketComponent.getFileFromS3("patrimoineIloAu13mai24")).thenReturn(testFile);
-    } else {
-      throw new RuntimeException("Test file not found in resources/files");
-    }
   }
 
   @Test
@@ -60,5 +49,22 @@ public class PatrimoineIT extends FacadeIT {
     Patrimoine actual = api.getPatrimoineByNom("patrimoineIloAu13mai24");
 
     assertEquals(patrimoine_ilo(), actual);
+  }
+
+  @Test
+  void get_patrimoine_by_name_ko() {
+    ApiClient apiClient = anApiClient();
+    PatrimoineApi api = new PatrimoineApi(apiClient);
+
+    ApiException apiException =
+        assertThrows(ApiException.class, () -> api.getPatrimoineByNom("dummy"));
+    String responseBody = apiException.getResponseBody();
+    assertEquals(
+        "{"
+            + "\"type\":\"400 BAD_REQUEST\","
+            + "\"message\":\""
+            + "Patrimoine identified with name dummy not found"
+            + "\"}",
+        responseBody);
   }
 }
