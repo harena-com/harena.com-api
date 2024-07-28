@@ -38,12 +38,13 @@ public class PatrimoineRepository extends AbstractRepository<Patrimoine> {
     return patrimoines.stream().map(this::saveOrUpdate).collect(Collectors.toList());
   }
 
+  //TODO: make idempotent, here you just write and upload the file
+  //Look for an existing file, if you do not find one create, else update
   private Patrimoine saveOrUpdate(Patrimoine patrimoine) {
-    String fileName = patrimoine.nom() + ".json";
-    File file = new File(fileName);
+    File file = new File(patrimoine.nom());
     try {
       Files.writeString(file.toPath(), serialiseur.serialise(patrimoine));
-      bucketComponent.upload(file, fileName);
+      bucketComponent.upload(file, patrimoine.nom());
     } catch (IOException e) {
       throw new InternalServerErrorException(e);
     }
