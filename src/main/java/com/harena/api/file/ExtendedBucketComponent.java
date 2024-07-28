@@ -3,12 +3,14 @@ package com.harena.api.file;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Iterable;
 
 @Component
+@Slf4j
 public class ExtendedBucketComponent {
   private final BucketComponent bucketComponent;
   private final S3Client s3Client;
@@ -44,6 +46,12 @@ public class ExtendedBucketComponent {
   }
 
   public File getFileFromS3(String fileName) {
-    return bucketComponent.download(fileName);
+    File file = bucketComponent.download(fileName);
+    if (file == null || !file.exists()) {
+      log.error("File not found: " + fileName);
+    } else {
+      log.info("File found: " + fileName);
+    }
+    return file;
   }
 }
