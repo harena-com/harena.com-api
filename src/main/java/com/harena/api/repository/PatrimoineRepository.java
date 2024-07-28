@@ -40,6 +40,7 @@ public class PatrimoineRepository extends AbstractRepository<Patrimoine> {
 
   //TODO: make idempotent, here you just write and upload the file
   //Look for an existing file, if you do not find one create, else update
+  //Delete and replace if existing
   private Patrimoine saveOrUpdate(Patrimoine patrimoine) {
     File file = new File(patrimoine.nom());
     try {
