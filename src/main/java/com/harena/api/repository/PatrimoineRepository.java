@@ -4,6 +4,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.model.exception.InternalServerErrorException;
+import com.harena.api.model.exception.NotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -40,7 +41,13 @@ public class PatrimoineRepository {
   }
 
   public Patrimoine getPatrimoineByName(String patrimoineName) {
-    File patrimoineFile = bucketComponent.getFileFromS3(patrimoineName);
+    File patrimoineFile =
+        bucketComponent
+            .getFileFromS3(patrimoineName)
+            .orElseThrow(
+                () ->
+                    new NotFoundException(
+                        "Patrimoine identified with name " + patrimoineName + " not found"));
     return createPatrimoineFrom(patrimoineFile);
   }
 }
