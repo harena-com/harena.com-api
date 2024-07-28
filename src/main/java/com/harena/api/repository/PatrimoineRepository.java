@@ -4,6 +4,7 @@ import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.model.exception.NotFoundException;
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import school.hei.patrimoine.modele.Patrimoine;
@@ -31,5 +32,21 @@ public class PatrimoineRepository extends AbstractRepository<Patrimoine> {
                     new NotFoundException(
                         "Patrimoine identified with name " + patrimoineName + " not found"));
     return createFrom(patrimoineFile);
+  }
+
+  public List<Patrimoine> saveOrUpdateAll(List<Patrimoine> patrimoines) {
+    return patrimoines.stream().map(this::saveOrUpdate).collect(Collectors.toList());
+  }
+
+  private Patrimoine saveOrUpdate(Patrimoine patrimoine) {
+    String fileName = patrimoine.nom() + ".json";
+    File file = new File(fileName);
+    try {
+      Files.writeString(file.toPath(), serialiseur.serialise(patrimoine));
+      bucketComponent.upload(file, fileName);
+    } catch (IOException e) {
+      throw new InternalServerErrorException(e);
+    }
+    return patrimoine;
   }
 }

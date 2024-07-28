@@ -49,4 +49,8 @@ public class ExtendedBucketComponent {
   public Optional<File> getFileFromS3(String fileName) {
     return Optional.of(bucketComponent.download(fileName));
   }
+
+  public FileHash upload(File file, String bucketKey) {
+    return bucketComponent.upload(file, bucketKey);
+  }
 }
