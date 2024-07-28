@@ -1,11 +1,12 @@
 package com.harena.api.endpoint.rest.mapper;
 
+import static com.harena.api.endpoint.rest.model.Argent.TypeEnum.AUTRES;
+import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.*;
+
 import com.harena.api.endpoint.rest.model.*;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@AllArgsConstructor
 public class PossessionMapper {
   private PossessionAvecType toRest() {
     return new PossessionAvecType();
@@ -13,13 +14,13 @@ public class PossessionMapper {
 
   public PossessionAvecType toRest(school.hei.patrimoine.modele.possession.Argent domain) {
     return toRest()
-        .type(PossessionAvecType.TypeEnum.ARGENT)
+        .type(ARGENT)
         .argent(
             new Argent()
                 .nom(domain.getNom())
                 .t(domain.getT())
                 .valeurComptable(domain.getValeurComptable())
-                .type(Argent.TypeEnum.AUTRES)
+                .type(AUTRES)
                 // Todo: get devise code
                 .devise(new Devise().nom(domain.getDevise().nom()))
                 .dateDOuverture(domain.getDateOuverture()));
@@ -27,7 +28,7 @@ public class PossessionMapper {
 
   public PossessionAvecType toRest(school.hei.patrimoine.modele.possession.Materiel domain) {
     return toRest()
-        .type(PossessionAvecType.TypeEnum.MATERIEL)
+        .type(MATERIEL)
         .materiel(
             new Materiel()
                 .nom(domain.getNom())
@@ -41,7 +42,7 @@ public class PossessionMapper {
 
   public PossessionAvecType toRest(school.hei.patrimoine.modele.possession.FluxArgent domain) {
     return toRest()
-        .type(PossessionAvecType.TypeEnum.FLUXARGENT)
+        .type(FLUXARGENT)
         .fluxArgent(
             new FluxArgent()
                 .t(domain.getT())
@@ -54,7 +55,7 @@ public class PossessionMapper {
                         .nom(domain.getArgent().getNom())
                         .t(domain.getArgent().getT())
                         .valeurComptable(domain.getArgent().getValeurComptable())
-                        .type(Argent.TypeEnum.AUTRES)
+                        .type(AUTRES)
                         // Todo: get devise code
                         .devise(new Devise().nom(domain.getArgent().getDevise().nom()))
                         .dateDOuverture(domain.getArgent().getDateOuverture()))
