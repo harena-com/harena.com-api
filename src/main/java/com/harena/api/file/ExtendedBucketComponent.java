@@ -42,4 +42,8 @@ public class ExtendedBucketComponent {
 
     return results;
   }
+
+  public File getFileFromS3(String fileName) {
+    return bucketComponent.download(fileName);
+  }
 }

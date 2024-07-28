@@ -14,4 +14,8 @@ public class PatrimoineService {
   public List<Patrimoine> getPaginatedPatrimoines(int page, int pageSize) {
     return repository.getAllPaginatedPatrimoines(pageSize, page);
   }
+
+  public Patrimoine getPatrimoineByName(String patrimoineName) {
+    return repository.getPatrimoineByName(patrimoineName);
+  }
 }

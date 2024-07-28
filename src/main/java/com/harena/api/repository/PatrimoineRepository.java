@@ -38,4 +38,9 @@ public class PatrimoineRepository {
     }
     return (Patrimoine) serialiseur.deserialise(patrimoineAsString);
   }
+
+  public Patrimoine getPatrimoineByName(String patrimoineName) {
+    File patrimoineFile = bucketComponent.getFileFromS3(patrimoineName);
+    return createPatrimoineFrom(patrimoineFile);
+  }
 }
