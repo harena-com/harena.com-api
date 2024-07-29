@@ -47,6 +47,21 @@ public class ExtendedBucketComponent {
   }
 
   public Optional<File> getFileFromS3(String fileName) {
-    return Optional.of(bucketComponent.download(fileName));
+    try {
+      return Optional.of(bucketComponent.download(fileName));
+    }catch (Exception e){
+      return Optional.empty();
+    }
+  }
+
+  public FileHash upload(File file, String bucketKey) {
+    return bucketComponent.upload(file, bucketKey);
+  }
+
+  public void deleteFile(String fileName) {
+    DeleteObjectRequest deleteObjectRequest =
+        DeleteObjectRequest.builder().bucket(bucketComponent.getBucketName()).key(fileName).build();
+
+    s3Client.deleteObject(deleteObjectRequest);
   }
 }

@@ -2,8 +2,10 @@ package com.harena.api.repository;
 
 import com.harena.api.file.ExtendedBucketComponent;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.springframework.stereotype.Repository;
+import school.hei.patrimoine.modele.Patrimoine;
 import school.hei.patrimoine.modele.possession.Possession;
 
 @Repository
@@ -22,11 +24,16 @@ public class PossessionRepository extends AbstractRepository<Possession> {
   }
 
   @Override
-  public Possession getByName(String name) {
+  public Optional<Possession> getByName(String name) {
     return null;
   }
 
   public Set<Possession> getByPatrimoineName(String patrimoineName, int limit, int offset) {
-    return paginateSet(patrimoineRepository.getByName(patrimoineName).possessions(), limit, offset);
+    Optional<Patrimoine> foundPatrimoine = patrimoineRepository.getByName(patrimoineName);
+    if (foundPatrimoine.isPresent()) {
+      return foundPatrimoine.get().possessions();
+    } else {
+      return Set.of();
+    }
   }
 }
