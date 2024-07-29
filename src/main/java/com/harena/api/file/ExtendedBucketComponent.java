@@ -49,7 +49,7 @@ public class ExtendedBucketComponent {
   public Optional<File> getFileFromS3(String fileName) {
     try {
       return Optional.of(bucketComponent.download(fileName));
-    }catch (Exception e){
+    } catch (Exception e) {
       return Optional.empty();
     }
   }
