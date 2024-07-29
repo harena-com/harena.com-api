@@ -1,5 +1,6 @@
 package com.harena.api.integration.confUtils;
 
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import com.harena.api.endpoint.rest.client.ApiClient;
@@ -29,5 +30,7 @@ public class TestUtils {
 
     when(bucketComponent.getFileFromS3("patrimoineIloAu13mai24"))
         .thenReturn(Optional.of(getPatrimoineTestFile()));
+
+    doNothing().when(bucketComponent).deleteFile("patrimoineIloAu13mai24");
   }
 }

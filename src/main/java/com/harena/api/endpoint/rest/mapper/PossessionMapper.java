@@ -4,10 +4,14 @@ import static com.harena.api.endpoint.rest.model.Argent.TypeEnum.AUTRES;
 import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.*;
 
 import com.harena.api.endpoint.rest.model.*;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("RestPossessionMapper")
+@AllArgsConstructor
 public class PossessionMapper {
+  private final DeviseMapper deviseMapper;
+
   private PossessionAvecType toRest() {
     return new PossessionAvecType();
   }
