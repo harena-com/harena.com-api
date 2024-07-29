@@ -12,10 +12,10 @@ public class PatrimoineService {
   private final PatrimoineRepository repository;
 
   public List<Patrimoine> getPaginatedPatrimoines(int page, int pageSize) {
-    return repository.getAllPaginatedPatrimoines(pageSize, page);
+    return repository.getAllPaginated(pageSize, page);
   }
 
   public Patrimoine getPatrimoineByName(String patrimoineName) {
-    return repository.getPatrimoineByName(patrimoineName);
+    return repository.getByName(patrimoineName);
   }
 }

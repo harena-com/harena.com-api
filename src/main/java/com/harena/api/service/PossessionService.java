@@ -3,7 +3,7 @@ package com.harena.api.service;
 import com.harena.api.endpoint.rest.mapper.PossessionMapper;
 import com.harena.api.endpoint.rest.model.PossessionAvecType;
 import com.harena.api.model.exception.NotImplementedException;
-import com.harena.api.repository.PatrimoineRepository;
+import com.harena.api.repository.PossessionRepository;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,12 @@ import school.hei.patrimoine.modele.possession.Materiel;
 @Service
 @AllArgsConstructor
 public class PossessionService {
-  private final PatrimoineRepository repository;
+  private final PossessionRepository repository;
   private PossessionMapper mapper;
 
   public List<PossessionAvecType> getPossessionsByPatrimoineName(
-      int page, int pageSize, String nom) {
-    // Todo: implement pagination
-    return repository.getPossessionsByPatrimoineName(nom).stream()
+      int page, int pageSize, String nomPatrimoine) {
+    return repository.getByPatrimoineName(nomPatrimoine, pageSize, page).stream()
         .map(
             possession ->
                 switch (possession) {

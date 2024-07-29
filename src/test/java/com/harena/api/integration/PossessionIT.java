@@ -37,7 +37,7 @@ public class PossessionIT extends FacadeIT {
     ApiClient apiClient = anApiClient();
     PossessionApi api = new PossessionApi(apiClient);
     List<PossessionAvecType> data =
-        api.getPatrimoinePossessions(patrimoine_ilo().getNom(), 0, 1).getData();
+        api.getPatrimoinePossessions(patrimoine_ilo().getNom(), 0, Integer.MAX_VALUE).getData();
 
     assertTrue(data.contains(argent_espece_de_ilo()));
     assertTrue(data.contains(vie_courant_de_ilo()));
