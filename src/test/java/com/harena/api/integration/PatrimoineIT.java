@@ -1,14 +1,14 @@
 package com.harena.api.integration;
 
-import static com.harena.api.integration.confUtils.TestMocks.patrimoine_ilo;
+import static com.harena.api.integration.confUtils.TestMocks.*;
 import static com.harena.api.integration.confUtils.TestUtils.setupExtendedBucketComponent;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.harena.api.conf.FacadeIT;
 import com.harena.api.endpoint.rest.api.PatrimoineApi;
 import com.harena.api.endpoint.rest.client.ApiClient;
 import com.harena.api.endpoint.rest.client.ApiException;
+import com.harena.api.endpoint.rest.model.GetPatrimoines200Response;
 import com.harena.api.endpoint.rest.model.Patrimoine;
 import com.harena.api.file.ExtendedBucketComponent;
 import com.harena.api.integration.confUtils.TestUtils;
@@ -66,5 +66,22 @@ public class PatrimoineIT extends FacadeIT {
             + "Patrimoine identified with name dummy not found"
             + "\"}",
         responseBody);
+  }
+
+  @Test
+  void crupdate_patrimoine_ok() throws ApiException {
+    ApiClient apiClient = anApiClient();
+    PatrimoineApi api = new PatrimoineApi(apiClient);
+
+    var data = List.of(
+            patrimoine_ilo_updated(),
+            patrimoine_to_create()
+    );
+
+    var actual = api.crupdatePatrimoines(new GetPatrimoines200Response().data(data));
+
+    System.out.println(actual.getData());
+
+    assertTrue(actual.getData().containsAll(data));
   }
 }

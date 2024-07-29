@@ -1,9 +1,14 @@
 package com.harena.api.repository;
 
+import static java.io.File.*;
+
 import com.harena.api.file.ExtendedBucketComponent;
-import com.harena.api.model.exception.NotFoundException;
+import com.harena.api.model.exception.InternalServerErrorException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -23,28 +28,18 @@ public class PatrimoineRepository extends AbstractRepository<Patrimoine> {
   }
 
   @Override
-  public Patrimoine getByName(String patrimoineName) {
-    File patrimoineFile =
-        bucketComponent
-            .getFileFromS3(patrimoineName)
-            .orElseThrow(
-                () ->
-                    new NotFoundException(
-                        "Patrimoine identified with name " + patrimoineName + " not found"));
-    return createFrom(patrimoineFile);
+  public Optional<Patrimoine> getByName(String patrimoineName) {
+    return bucketComponent.getFileFromS3(patrimoineName).stream().map(this::createFrom).findFirst();
   }
 
   public List<Patrimoine> saveOrUpdateAll(List<Patrimoine> patrimoines) {
     return patrimoines.stream().map(this::saveOrUpdate).collect(Collectors.toList());
   }
 
-  // TODO: make idempotent, here you just write and upload the file
-  // Look for an existing file, if you do not find one create, else update
-  // Delete and replace if existing
   private Patrimoine saveOrUpdate(Patrimoine patrimoine) {
     String fileName = patrimoine.nom();
-    File file = new File(fileName);
     try {
+      File file = createTempFile(fileName, "");
       if (bucketComponent.getFileFromS3(fileName).isPresent()) {
         bucketComponent.deleteFile(fileName);
       }

@@ -1,5 +1,6 @@
 package com.harena.api.service;
 
+import com.harena.api.model.exception.NotFoundException;
 import com.harena.api.repository.PatrimoineRepository;
 import com.harena.api.repository.mapper.PatrimoineMapper;
 import java.util.List;
@@ -25,7 +26,12 @@ public class PatrimoineService {
   }
 
   public Patrimoine getPatrimoineByName(String patrimoineName) {
-    return repository.getByName(patrimoineName);
+    return repository
+        .getByName(patrimoineName)
+        .orElseThrow(
+            () ->
+                new NotFoundException(
+                    "Patrimoine identified with name " + patrimoineName + " not found"));
   }
 
   public List<Patrimoine> crupdatePatrimoines(

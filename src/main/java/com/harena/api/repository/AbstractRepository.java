@@ -5,10 +5,7 @@ import com.harena.api.model.exception.InternalServerErrorException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import school.hei.patrimoine.serialisation.Serialiseur;
 
 public abstract class AbstractRepository<T> {
@@ -22,7 +19,7 @@ public abstract class AbstractRepository<T> {
 
   public abstract List<T> getAllPaginated(int limit, int offset);
 
-  public abstract T getByName(String name);
+  public abstract Optional<T> getByName(String name);
 
   protected T createFrom(File file) {
     String tAsString;

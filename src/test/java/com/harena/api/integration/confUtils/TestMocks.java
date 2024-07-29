@@ -1,9 +1,10 @@
 package com.harena.api.integration.confUtils;
 
+import static java.time.Month.JUNE;
+import static java.time.Month.MAY;
 import static com.harena.api.endpoint.rest.model.Argent.TypeEnum.AUTRES;
 import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.ARGENT;
 import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.FLUXARGENT;
-import static java.time.Month.*;
 
 import com.harena.api.endpoint.rest.model.*;
 import java.time.LocalDate;
@@ -21,6 +22,18 @@ public class TestMocks {
         .possesseur(ilo())
         .t(au13mai24)
         .valeurComptable(600_000);
+  }
+
+  public static Patrimoine patrimoine_ilo_updated() {
+    return patrimoine_ilo().t(LocalDate.of(2024, JUNE, 26)).valeurComptable(600_000);
+  }
+
+  public static Patrimoine patrimoine_to_create() {
+    return new Patrimoine()
+            .nom("patrimoineToCreate")
+            .possesseur(ilo())
+            .t(LocalDate.of(2024, JUNE, 26))
+            .valeurComptable(0);
   }
 
   public static PossessionAvecType argent_espece_de_ilo() {
