@@ -8,6 +8,7 @@ import com.harena.api.endpoint.rest.model.Patrimoine;
 import com.harena.api.endpoint.rest.model.PossessionAvecType;
 import com.harena.api.service.PatrimoineService;
 import com.harena.api.service.PossessionService;
+import java.util.HashSet;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import school.hei.patrimoine.modele.possession.Possession;
 
 @RestController
 public class PatrimoineController {
@@ -55,6 +57,18 @@ public class PatrimoineController {
     List<Patrimoine> updatedPatrimoines =
         service.crupdatePatrimoines(patrimoines.getData()).stream().map(mapper::toRest).toList();
     return new GetPatrimoines200Response().data(updatedPatrimoines);
+  }
+
+  @PutMapping("/patrimoines/{nom_patrimoine}/possessions")
+  public GetPatrimoinePossessions200Response crupdatePossessionByPatrimoinesName(
+          @RequestBody GetPatrimoinePossessions200Response possessions,
+          @PathVariable String nom_patrimoine) {
+    List<Possession> updatedPatrimoines =
+            possessionService.crupdatePossessionByPatrimoinesName(
+                    nom_patrimoine,
+                    possessions.getData().stream().map(possessionMapper::toDomain).toList());
+    return new GetPatrimoinePossessions200Response()
+            .data(possessionMapper.mapPossessions(new HashSet<>(updatedPatrimoines)));
   }
 
   @GetMapping("/patrimoines/{nom_patrimoine}/possessions")
