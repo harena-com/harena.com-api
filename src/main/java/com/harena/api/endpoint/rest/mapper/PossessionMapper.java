@@ -4,6 +4,9 @@ import static com.harena.api.endpoint.rest.model.Argent.TypeEnum.AUTRES;
 import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.*;
 
 import com.harena.api.endpoint.rest.model.*;
+import com.harena.api.model.exception.NotImplementedException;
+import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -67,5 +70,21 @@ public class PossessionMapper {
                 .fin(domain.getFin())
                 .fluxMensuel(domain.getFluxMensuel())
                 .dateDOperation(domain.getDateOperation()));
+  }
+
+  public List<PossessionAvecType> mapPossessions(
+      Set<school.hei.patrimoine.modele.possession.Possession> toMap) {
+    return toMap.stream()
+        .map(
+            possession ->
+                switch (possession) {
+                  case school.hei.patrimoine.modele.possession.Argent argent -> toRest(argent);
+                  case school.hei.patrimoine.modele.possession.Materiel materiel -> toRest(
+                      materiel);
+                  case school.hei.patrimoine.modele.possession.FluxArgent fluxArgent -> toRest(
+                      fluxArgent);
+                  default -> throw new NotImplementedException(possession.getClass().getName());
+                })
+        .toList();
   }
 }
