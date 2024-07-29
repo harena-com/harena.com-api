@@ -9,6 +9,7 @@ import com.harena.api.endpoint.rest.model.PossessionAvecType;
 import com.harena.api.model.exception.NotImplementedException;
 import com.harena.api.service.PatrimoineService;
 import com.harena.api.service.PossessionService;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -61,6 +62,18 @@ public class PatrimoineController {
     List<Patrimoine> updatedPatrimoines =
         service.crupdatePatrimoines(patrimoines.getData()).stream().map(mapper::toRest).toList();
     return new GetPatrimoines200Response().data(updatedPatrimoines);
+  }
+
+  @PutMapping("/patrimoines/{nom_patrimoine}/possessions")
+  public GetPatrimoinePossessions200Response crupdatePossessionByPatrimoinesName(
+      @RequestBody GetPatrimoinePossessions200Response possessions,
+      @PathVariable String nom_patrimoine) {
+    List<Possession> updatedPatrimoines =
+        possessionService.crupdatePossessionByPatrimoinesName(
+            nom_patrimoine,
+            possessions.getData().stream().map(possessionMapper::toDomain).toList());
+    return new GetPatrimoinePossessions200Response()
+        .data(mapPossessions(new HashSet<>(updatedPatrimoines)));
   }
 
   @GetMapping("/patrimoines/{nom_patrimoine}/possessions")

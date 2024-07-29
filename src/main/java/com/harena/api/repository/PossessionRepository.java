@@ -1,6 +1,8 @@
 package com.harena.api.repository;
 
 import com.harena.api.file.ExtendedBucketComponent;
+import com.harena.api.model.exception.NotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,5 +37,20 @@ public class PossessionRepository extends AbstractRepository<Possession> {
     } else {
       return Set.of();
     }
+  }
+
+  public List<Possession> saveOrUpdate(String patrimoine_nom, Set<Possession> possessions) {
+    var patrimoineOptional = patrimoineRepository.getByName(patrimoine_nom);
+
+    if (patrimoineOptional.isEmpty()) {
+      throw new NotFoundException("Not found patrimoine: " + patrimoine_nom);
+    }
+    var patrimoine = patrimoineOptional.get();
+    var result =
+        patrimoineRepository.saveOrUpdateAll(
+            Collections.singletonList(
+                new Patrimoine(
+                    patrimoine.nom(), patrimoine.possesseur(), patrimoine.t(), possessions)));
+    return result.getFirst().possessions().stream().toList();
   }
 }

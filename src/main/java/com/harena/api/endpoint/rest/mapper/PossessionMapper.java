@@ -4,6 +4,8 @@ import static com.harena.api.endpoint.rest.model.Argent.TypeEnum.AUTRES;
 import static com.harena.api.endpoint.rest.model.PossessionAvecType.TypeEnum.*;
 
 import com.harena.api.endpoint.rest.model.*;
+import com.harena.api.model.exception.BadRequestException;
+import com.harena.api.model.exception.NotImplementedException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -67,5 +69,36 @@ public class PossessionMapper {
                 .fin(domain.getFin())
                 .fluxMensuel(domain.getFluxMensuel())
                 .dateDOperation(domain.getDateOperation()));
+  }
+
+  public school.hei.patrimoine.modele.possession.Possession toDomain(PossessionAvecType rest) {
+    return switch (rest.getType()) {
+      case MATERIEL -> new school.hei.patrimoine.modele.possession.Materiel(
+          rest.getMateriel().getNom(),
+          rest.getMateriel().getT(),
+          rest.getMateriel().getValeurComptable(),
+          rest.getMateriel().getDateDAcquisition(),
+          rest.getMateriel().getTauxDappreciationAnnuel());
+      case FLUXARGENT -> new school.hei.patrimoine.modele.possession.FluxArgent(
+          rest.getFluxArgent().getNom(),
+          new school.hei.patrimoine.modele.possession.Argent(
+              rest.getArgent().getNom(),
+              rest.getArgent().getT(),
+              rest.getArgent().getT(),
+              rest.getArgent().getValeurComptable(),
+              deviseMapper.toDomain(rest.getArgent().getDevise())),
+          rest.getFluxArgent().getDebut(),
+          rest.getFluxArgent().getFin(),
+          rest.getFluxArgent().getFluxMensuel(),
+          rest.getFluxArgent().getDateDOperation());
+      case ARGENT -> new school.hei.patrimoine.modele.possession.Argent(
+          rest.getArgent().getNom(),
+          rest.getArgent().getT(),
+          rest.getArgent().getT(),
+          rest.getArgent().getValeurComptable(),
+          deviseMapper.toDomain(rest.getArgent().getDevise()));
+      case null -> throw new BadRequestException("The possession is null");
+      default -> throw new NotImplementedException("Not implemented " + rest.getType());
+    };
   }
 }
