@@ -1,6 +1,6 @@
 package com.harena.api.service;
 
-import com.harena.api.endpoint.rest.mapper.PossessionMapper;
+import com.harena.api.model.exception.NotFoundException;
 import com.harena.api.repository.PossessionRepository;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -11,10 +11,16 @@ import school.hei.patrimoine.modele.possession.Possession;
 @AllArgsConstructor
 public class PossessionService {
   private final PossessionRepository repository;
-  private PossessionMapper mapper;
 
   public Set<Possession> getPossessionsByPatrimoineName(
       int page, int pageSize, String nomPatrimoine) {
     return repository.getByPatrimoineName(nomPatrimoine, pageSize, page);
+  }
+
+  public Possession getPatrimoinePossessionByNom(String patrimoineName, String name) {
+    return repository
+        .getPatrimoinePossessionByName(patrimoineName, name)
+        .orElseThrow(
+            () -> new NotFoundException("Possession identified with name " + name + " not found"));
   }
 }

@@ -28,6 +28,13 @@ public class PossessionRepository extends AbstractRepository<Possession> {
     return null;
   }
 
+  public Optional<Possession> getPatrimoinePossessionByName(
+      String patrimoineName, String possessionName) {
+    return patrimoineRepository
+        .getByName(patrimoineName)
+        .map(patrimoine -> patrimoine.possessionParNom(possessionName));
+  }
+
   public Set<Possession> getByPatrimoineName(String patrimoineName, int limit, int offset) {
     Optional<Patrimoine> foundPatrimoine = patrimoineRepository.getByName(patrimoineName);
     if (foundPatrimoine.isPresent()) {
