@@ -1,9 +1,11 @@
 package com.harena.api.endpoint.rest.controller;
 
 import com.harena.api.endpoint.rest.mapper.PatrimoineMapper;
+import com.harena.api.endpoint.rest.model.GetPatrimoinePossessions200Response;
 import com.harena.api.endpoint.rest.model.GetPatrimoines200Response;
 import com.harena.api.endpoint.rest.model.Patrimoine;
 import com.harena.api.service.PatrimoineService;
+import com.harena.api.service.PossessionService;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class PatrimoineController {
   private final PatrimoineService service;
+  private final PossessionService possessionService;
   private final PatrimoineMapper mapper;
 
   @GetMapping("/patrimoines")
@@ -29,5 +32,14 @@ public class PatrimoineController {
   @GetMapping("/patrimoines/{nom_patrimoine}")
   public Patrimoine getPatrimoineByNom(@PathVariable("nom_patrimoine") String patrimoineName) {
     return mapper.toRest(service.getPatrimoineByName(patrimoineName));
+  }
+
+  @GetMapping("/patrimoines/{nom_patrimoine}/possessions")
+  public GetPatrimoinePossessions200Response getPatrimoines(
+      @RequestParam(value = "page", defaultValue = "0") int page,
+      @RequestParam(value = "page_size", defaultValue = "10") int pageSize,
+      @PathVariable String nom_patrimoine) {
+    return new GetPatrimoinePossessions200Response()
+        .data(possessionService.getPossessionsByPatrimoineName(page, pageSize, nom_patrimoine));
   }
 }
