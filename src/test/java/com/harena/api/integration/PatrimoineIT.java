@@ -73,14 +73,9 @@ public class PatrimoineIT extends FacadeIT {
     ApiClient apiClient = anApiClient();
     PatrimoineApi api = new PatrimoineApi(apiClient);
 
-    var data = List.of(
-            patrimoine_ilo_updated(),
-            patrimoine_to_create()
-    );
+    var data = List.of(patrimoine_ilo_updated(), patrimoine_to_create());
 
     var actual = api.crupdatePatrimoines(new GetPatrimoines200Response().data(data));
-
-    System.out.println(actual.getData());
 
     assertTrue(actual.getData().containsAll(data));
   }
