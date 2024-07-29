@@ -6,11 +6,9 @@ import com.harena.api.endpoint.rest.model.GetPatrimoinePossessions200Response;
 import com.harena.api.endpoint.rest.model.GetPatrimoines200Response;
 import com.harena.api.endpoint.rest.model.Patrimoine;
 import com.harena.api.endpoint.rest.model.PossessionAvecType;
-import com.harena.api.model.exception.NotImplementedException;
 import com.harena.api.service.PatrimoineService;
 import com.harena.api.service.PossessionService;
 import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +16,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import school.hei.patrimoine.modele.possession.Argent;
-import school.hei.patrimoine.modele.possession.FluxArgent;
-import school.hei.patrimoine.modele.possession.Materiel;
-import school.hei.patrimoine.modele.possession.Possession;
 
 @RestController
 public class PatrimoineController {
@@ -69,21 +63,8 @@ public class PatrimoineController {
       @RequestParam(value = "page_size", defaultValue = "10") int pageSize,
       @PathVariable String nom_patrimoine) {
     List<PossessionAvecType> data =
-        mapPossessions(
+        possessionMapper.mapPossessions(
             possessionService.getPossessionsByPatrimoineName(page, pageSize, nom_patrimoine));
     return new GetPatrimoinePossessions200Response().data(data);
-  }
-
-  private List<PossessionAvecType> mapPossessions(Set<Possession> toMap) {
-    return toMap.stream()
-        .map(
-            possession ->
-                switch (possession) {
-                  case Argent argent -> possessionMapper.toRest(argent);
-                  case Materiel materiel -> possessionMapper.toRest(materiel);
-                  case FluxArgent fluxArgent -> possessionMapper.toRest(fluxArgent);
-                  default -> throw new NotImplementedException(possession.getClass().getName());
-                })
-        .toList();
   }
 }

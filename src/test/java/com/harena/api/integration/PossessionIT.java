@@ -2,6 +2,7 @@ package com.harena.api.integration;
 
 import static com.harena.api.integration.confUtils.TestMocks.*;
 import static com.harena.api.integration.confUtils.TestUtils.setupExtendedBucketComponent;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.harena.api.conf.FacadeIT;
@@ -41,5 +42,15 @@ public class PossessionIT extends FacadeIT {
 
     assertTrue(data.contains(argent_espece_de_ilo()));
     assertTrue(data.contains(vie_courant_de_ilo()));
+  }
+
+  @Test
+  void get_patrimoine_possession_by_nom_ok() throws ApiException {
+    ApiClient apiClient = anApiClient();
+    PossessionApi api = new PossessionApi(apiClient);
+    PossessionAvecType actual =
+        api.getPatrimoinePossessionByNom("patrimoineIloAu13mai24", "Vie courante");
+
+    assertEquals(vie_courant_de_ilo(), actual);
   }
 }
